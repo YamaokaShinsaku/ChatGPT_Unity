@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using AAA.OpenAI;
+using OpenAI;
 
 public class Test : MonoBehaviour
 {
@@ -9,10 +9,11 @@ public class Test : MonoBehaviour
     void Start()
     {
         // APIキーを入力
-        var openAIApiKey = "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"; 
+        var openAIApiKey = "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"; 
         var chatGPTConnection = new ChatGPTConnection(openAIApiKey);
+        // ChatGPTにする質問を入力
+        // 好きな魚料理を1つ教えて など
         chatGPTConnection.RequestAsync("{{好きな魚料理を1つ教えて}}");
-        //好きな魚料理を1つ教えて など
     }
 
     // Update is called once per frame

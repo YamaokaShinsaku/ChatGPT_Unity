@@ -5,14 +5,16 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace AAA.OpenAI
+namespace OpenAI
 {
     public class ChatGPTConnection
     {
+        // APIキー
         private readonly string _apiKey;
-        //会話履歴を保持するリスト
+        // 会話履歴を保持するリスト
         private readonly List<ChatGPTMessageModel> _messageList = new List<ChatGPTMessageModel>();
 
+        // ChatGPTにどういうふるまいをさせるのかを設定
         public ChatGPTConnection(string apiKey)
         {
             _apiKey = apiKey;
@@ -22,12 +24,12 @@ namespace AAA.OpenAI
 
         public async UniTask<ChatGPTResponseModel> RequestAsync(string userMessage)
         {
-            //文章生成AIのAPIのエンドポイントを設定
+            // 文章生成AIのAPIのエンドポイントを設定
             var apiUrl = "https://api.openai.com/v1/chat/completions";
 
             _messageList.Add(new ChatGPTMessageModel { role = "user", content = userMessage });
 
-            //OpenAIのAPIリクエストに必要なヘッダー情報を設定
+            // OpenAIのAPIリクエストに必要なヘッダー情報を設定
             var headers = new Dictionary<string, string>
             {
                 {"Authorization", "Bearer " + _apiKey},
@@ -35,7 +37,7 @@ namespace AAA.OpenAI
                 {"X-Slack-No-Retry", "1"}
             };
 
-            //文章生成で利用するモデルやトークン上限、プロンプトをオプションに設定
+            // 文章生成で利用するモデルやトークン上限、プロンプトをオプションに設定
             var options = new ChatGPTCompletionRequestModel()
             {
                 model = "gpt-3.5-turbo",
@@ -43,9 +45,10 @@ namespace AAA.OpenAI
             };
             var jsonOptions = JsonUtility.ToJson(options);
 
+            // 自分のメッセージを表示
             Debug.Log("自分:" + userMessage);
 
-            //OpenAIの文章生成(Completion)にAPIリクエストを送り、結果を変数に格納
+            // OpenAIの文章生成(Completion)にAPIリクエストを送り、結果を変数に格納
             using var request = new UnityWebRequest(apiUrl, "POST")
             {
                 uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(jsonOptions)),
@@ -69,6 +72,7 @@ namespace AAA.OpenAI
             {
                 var responseString = request.downloadHandler.text;
                 var responseObject = JsonUtility.FromJson<ChatGPTResponseModel>(responseString);
+                // ChatGPTの答えを表示
                 Debug.Log("ChatGPT:" + responseObject.choices[0].message.content);
                 _messageList.Add(responseObject.choices[0].message);
                 return responseObject;
@@ -77,6 +81,7 @@ namespace AAA.OpenAI
     }
 }
 
+// ChatGPTのモデルを設定するクラス
 [Serializable]
 public class ChatGPTMessageModel
 {
@@ -84,7 +89,7 @@ public class ChatGPTMessageModel
     public string content;
 }
 
-//ChatGPT APIにRequestを送るためのJSON用クラス
+// ChatGPT APIにRequestを送るためのJSON用クラス
 [Serializable]
 public class ChatGPTCompletionRequestModel
 {
@@ -92,7 +97,7 @@ public class ChatGPTCompletionRequestModel
     public List<ChatGPTMessageModel> messages;
 }
 
-//ChatGPT APIからのResponseを受け取るためのクラス
+// ChatGPT APIからのResponseを受け取るためのクラス
 [System.Serializable]
 public class ChatGPTResponseModel
 {
