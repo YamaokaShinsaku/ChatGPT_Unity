@@ -9,7 +9,7 @@ public class Test : MonoBehaviour
     void Start()
     {
         // APIキーを入力
-        var openAIApiKey = "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"; 
+        var openAIApiKey = "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"; 
         var chatGPTConnection = new ChatGPTConnection(openAIApiKey);
         chatGPTConnection.RequestAsync("{{好きな魚料理を1つ教えて}}");
         //好きな魚料理を1つ教えて など
