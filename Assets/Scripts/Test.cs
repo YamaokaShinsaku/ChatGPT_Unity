@@ -9,7 +9,7 @@ public class Test : MonoBehaviour
     void Start()
     {
         // APIƒL[‚ğ“ü—Í
-        var openAIApiKey = "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"; 
+        var openAIApiKey = "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"; 
         var chatGPTConnection = new ChatGPTConnection(openAIApiKey);
         // ChatGPT‚É‚·‚é¿–â‚ğ“ü—Í
         // D‚«‚È‹›—¿—‚ğ1‚Â‹³‚¦‚Ä ‚È‚Ç
